@@ -6,9 +6,12 @@ import { Bars3CenterLeftIcon, MagnifyingGlassIcon } from "react-native-heroicons
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { styles } from '../theme';
 import { TrendingMovies } from '../components/TrendingMovies';
+import MovieList from '../components/MovieList';
 
 export const HomeScreen = () => {
   const [trending, setTrending] = useState([1, 2, 3]);
+  const [upcoming, setUpcoming] = useState([1, 2, 3]);
+  const [topRated, setTopRated] = useState([1, 2, 3]);
 
   return (
     <View className="flex-1 bg-neutral-800">
@@ -34,6 +37,12 @@ export const HomeScreen = () => {
       >
         {/* Trending Movies Carousel */}
         <TrendingMovies data={trending} />
+
+        {/* List of Movies */}
+        <MovieList title="Upcoming Movies" data={upcoming} />
+
+        {/* List of Top Rated */}
+        <MovieList title="Top Rated" data={topRated} />
       </ScrollView>
     </View>
   )
