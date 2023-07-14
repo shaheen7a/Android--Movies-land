@@ -1,19 +1,41 @@
 import { View, Text, Image } from 'react-native'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { XMarkIcon } from 'react-native-heroicons/outline';
 import { Dimensions } from 'react-native';
 import { ScrollView, TextInput, TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import Loading from '../components/Loading';
-
+import { fallbackMoviePoster, image185, searchMovies } from '../api/moviedb'
+import { debounce } from 'lodash'
 
 const { width, height } = Dimensions.get('window');
 
 const SearchScreen = () => {
   const navigation = useNavigation();
-  const [results, setResults] = useState([1, 2, 3])
+  const [results, setResults] = useState([])
   const [loading, setLoading] = useState(false);
+
+  const handleSearch = search => {
+    if (search && search.length > 2) {
+      setLoading(true);
+      searchMovies({
+        query: search,
+        include_adult: false,
+        language: 'en-US',
+        page: '1'
+      }).then(data => {
+        console.log('got search results');
+        setLoading(false);
+        if (data && data.results) setResults(data.results);
+      })
+    } else {
+      setLoading(false);
+      setResults([])
+    }
+  }
+
+  const handleTextDebounce = useCallback(debounce(handleSearch, 400), []);
 
 
   return (
@@ -23,7 +45,7 @@ const SearchScreen = () => {
       <View
         className="mx-4 mb-3 flex-row justify-between items-center border border-neutral-500 rounded-full" >
         <TextInput
-          // onChangeText={handleTextDebounce}
+          onChangeText={handleTextDebounce}
           placeholder="Search Movie"
           placeholderTextColor={'lightgray'}
           className="pb-1 pl-6 flex-1 text-base font-semibold text-white tracking-wider"
@@ -58,12 +80,13 @@ const SearchScreen = () => {
                         onPress={() => navigation.push('Movie', item)}>
                         <View className="space-y-2 mb-4">
                           <Image
-                            source={require('../assets/imgs/poster.jpg')}
+                          source={{uri: image185(item.poster_path) || fallbackMoviePoster}}
+                            // source={require('../assets/imgs/poster.jpg')}
                             className="rounded-3xl"
                             style={{ width: width * 0.44, height: height * 0.3 }}
                           />
                           <Text className="text-gray-300 ml-1">
-                            Breaking Bad
+                             {item.title.length>22? item.title.slice(0,22)+'...': item.title}
                           </Text>
                         </View>
                       </TouchableWithoutFeedback>
@@ -76,7 +99,7 @@ const SearchScreen = () => {
           ) : (
             <View className="flex-row justify-center">
               <Image
-                source={require('../assets/imgs/poster.jpg')}
+                source={require('../assets/imgs/movieTime.png')}
                 className="h-96 w-96"
               />
             </View>

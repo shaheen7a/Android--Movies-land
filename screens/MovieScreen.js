@@ -10,6 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import Cast from '../components/Cast';
 import MovieList from '../components/MovieList';
 import Loading from '../components/Loading';
+import { fallbackMoviePoster, fetchMovieCredits, fetchMovieDetails, fetchSimilarMovies, image500 } from '../api/moviedb';
 
 
 const { width, height } = Dimensions.get('window');
@@ -18,16 +19,46 @@ const topMargin = ' mt-3';
 const MovieScreen = () => {
   const { params: item } = useRoute();
   const navigation = useNavigation();
-
+  const [movie, setMovie] = useState({});
   const [isFavourite, toggleFavourite] = useState(false);
-  const [cast, setCast] = useState([1, 2, 3, 4, 5, 6]);
-  const [similarMovies, setSimilarMovies] = useState([1, 2, 3, 4]);
+  const [cast, setCast] = useState([]);
+  const [similarMovies, setSimilarMovies] = useState([]);
   const [loading, setLoading] = useState(false);
 
 
   useEffect(() => {
-    // call the movie
-  }, [item])
+    setLoading(true);
+    getMovieDetials(item.id);
+    getMovieCredits(item.id);
+    getSimilarMovies(item.id);
+  }, [item]);
+
+  const getMovieDetials = async id => {
+    const data = await fetchMovieDetails(id);
+    console.log('got movie details');
+    setLoading(false);
+    if (data) {
+      setMovie({ ...movie, ...data });
+    }
+  }
+  const getMovieCredits = async id => {
+    const data = await fetchMovieCredits(id);
+    console.log('got movie credits')
+    if (data && data.cast) {
+      setCast(data.cast);
+    }
+
+  }
+  const getSimilarMovies = async id => {
+    const data = await fetchSimilarMovies(id);
+    console.log('got similar movies');
+    if (data && data.results) {
+      setSimilarMovies(data.results);
+    }
+
+  }
+
+  console.log(movie)
 
 
   return (
@@ -54,7 +85,8 @@ const MovieScreen = () => {
         ) : (
           <View>
             <Image
-              source={require('../assets/imgs/poster.jpg')}
+              source={{ uri: image500(movie.poster_path) || fallbackMoviePoster }}
+              // source={require('../assets/imgs/poster.jpg')}
               style={{ width, height: height * 0.55 }}
             />
             <LinearGradient
@@ -72,12 +104,16 @@ const MovieScreen = () => {
       <View style={{ marginTop: -(height * 0.09) }} className="space-y-3">
         {/* title */}
         <Text className="text-white text-center text-3xl font-bold tracking-widest">
-          Breaking Bad
+          {movie?.title}
         </Text>
 
         {/* status, release year, runtime */}
         <Text className="text-neutral-400 font-semibold text-base text-center">
-          {"Released"} • {"2020" || 'N/A'} • {"160"} min
+          {movie?.id ? (
+            <Text className="text-neutral-400 font-semibold text-base text-center">
+              {movie?.status} • {movie?.release_date?.split('-')[0] || 'N/A'} • {movie?.runtime} min
+            </Text>
+          ) : null}
         </Text>
 
 
@@ -85,14 +121,22 @@ const MovieScreen = () => {
         {/* genres  */}
         <View className="flex-row justify-center mx-4 space-x-2">
           <Text className="text-neutral-400 font-semibold text-base text-center">
-            Drama
+            {
+              movie?.genres?.map((genre, index) => {
+                let showDot = index + 1 != movie.genres.length;
+                return (
+                  <Text key={index} className="text-neutral-400 font-semibold text-base text-center">
+                    {genre?.name} {showDot ? "•" : null}
+                  </Text>
+                )
+              })}
           </Text>
 
         </View>
 
         {/* description */}
         <Text className="text-neutral-400 mx-4 tracking-wide">
-          It is Breaking Bad man !
+          {movie?.overview}
         </Text>
 
       </View>

@@ -2,6 +2,7 @@ import { View, Text, ScrollView, TouchableWithoutFeedback, Image, Dimensions, To
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { styles } from '../theme';
+import { fallbackMoviePoster, image185 } from '../api/moviedb';
 
 
 const { width, height } = Dimensions.get('window');
@@ -37,13 +38,16 @@ const MovieList = ({ title, data, hideSeeAll }) => {
               >
                 <View className="space-y-1 mr-4">
                   <Image
-                    source={require('../assets/imgs/poster.jpg')}
+                    source={{ uri: image185(item.poster_path) || fallbackMoviePoster }}
+                    // source={require('../assets/imgs/poster.jpg')}
                     className="rounded-3xl"
                     style={{ width: width * 0.33, height: height * 0.22 }}
                   />
                   <Text className="text-neutral-300 ml-1">
-                    Breaking Bad
-                    {/* {item.title.length > 14 ? item.title.slice(0, 14) + '...' : item.title} */}
+                    {
+                      item.title.length > 14 ? item.title.slice(0, 14) + '...' : item.title
+                    }
+                    {/* Breaking Bad */}
                   </Text>
                 </View>
               </TouchableWithoutFeedback>

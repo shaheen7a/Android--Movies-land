@@ -1,5 +1,6 @@
 import { View, Text, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native'
 import React from 'react'
+import { fallbackPersonImage, image185 } from '../api/moviedb';
 
 
 var { width, height } = Dimensions.get('window');
@@ -25,15 +26,16 @@ const Cast = ({ navigation, cast }) => {
                   className="overflow-hidden rounded-full h-20 w-20 items-center border border-neutral-500">
                   <Image
                     className="rounded-2xl h-24 w-20"
-                    source={require('../assets/imgs/poster.jpg')}
+                    source={{uri: image185(person?.profile_path) || fallbackPersonImage}}
+                    // source={require('../assets/imgs/poster.jpg')}
                   />
                 </View>
 
                 <Text className="text-white text-xs mt-1">
-                  Walter White
+                  {person?.character.length>10? person.character.slice(0,10)+'...' : person?.character}
                 </Text>
                 <Text className="text-neutral-400 text-xs">
-                  Bryian Cranston
+                  {person?.original_name.length>10? person.original_name.slice(0,10)+'...' : person?.original_name}
                 </Text>
               </TouchableOpacity>
             )
