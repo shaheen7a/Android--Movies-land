@@ -9,6 +9,7 @@ import { styles, theme } from '../theme';
 import { LinearGradient } from 'expo-linear-gradient'
 import Cast from '../components/Cast';
 import MovieList from '../components/MovieList';
+import Loading from '../components/Loading';
 
 
 const { width, height } = Dimensions.get('window');
@@ -19,8 +20,10 @@ const MovieScreen = () => {
   const navigation = useNavigation();
 
   const [isFavourite, toggleFavourite] = useState(false);
-  const [cast, setCast] = useState([1, 2, 3, 4, 5, 6])
-  const [similarMovies, setSimilarMovies] = useState([1, 2, 3, 4])
+  const [cast, setCast] = useState([1, 2, 3, 4, 5, 6]);
+  const [similarMovies, setSimilarMovies] = useState([1, 2, 3, 4]);
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     // call the movie
@@ -46,19 +49,23 @@ const MovieScreen = () => {
           </TouchableOpacity>
         </SafeAreaView>
 
-        <View>
-          <Image
-            source={require('../assets/imgs/poster.jpg')}
-            style={{ width, height: height * 0.55 }}
-          />
-          <LinearGradient
-            colors={['transparent', 'rgba(23, 23, 23, 0.8)', 'rgba(23, 23, 23, 1)']}
-            style={{ width, height: height * 0.40 }}
-            start={{ x: 0.5, y: 0 }}
-            end={{ x: 0.5, y: 1 }}
-            className="absolute bottom-0"
-          />
-        </View>
+        {loading ? (
+          <Loading />
+        ) : (
+          <View>
+            <Image
+              source={require('../assets/imgs/poster.jpg')}
+              style={{ width, height: height * 0.55 }}
+            />
+            <LinearGradient
+              colors={['transparent', 'rgba(23, 23, 23, 0.8)', 'rgba(23, 23, 23, 1)']}
+              style={{ width, height: height * 0.40 }}
+              start={{ x: 0.5, y: 0 }}
+              end={{ x: 0.5, y: 1 }}
+              className="absolute bottom-0"
+            />
+          </View>
+        )}
       </View>
 
       {/* movie details */}

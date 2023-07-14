@@ -7,11 +7,15 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { styles } from '../theme';
 import { TrendingMovies } from '../components/TrendingMovies';
 import MovieList from '../components/MovieList';
+import { useNavigation } from '@react-navigation/native';
+import Loading from '../components/Loading';
 
 export const HomeScreen = () => {
   const [trending, setTrending] = useState([1, 2, 3]);
   const [upcoming, setUpcoming] = useState([1, 2, 3]);
   const [topRated, setTopRated] = useState([1, 2, 3]);
+  const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
 
   return (
     <View className="flex-1 bg-neutral-800">
@@ -24,26 +28,30 @@ export const HomeScreen = () => {
             <Text style={styles.text}>M</Text>ovies <Text style={styles.text}>L</Text>and
           </Text>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Search')}>
             <MagnifyingGlassIcon size={40} strokeWidth={2} color="white" />
           </TouchableOpacity>
 
         </View>
       </SafeAreaView>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 10 }}
-      >
-        {/* Trending Movies Carousel */}
-        <TrendingMovies data={trending} />
+      {loading ? (
+        <Loading />
+      ) : (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 10 }}
+        >
+          {/* Trending Movies Carousel */}
+          <TrendingMovies data={trending} />
 
-        {/* List of Movies */}
-        <MovieList title="Upcoming Movies" data={upcoming} />
+          {/* List of Movies */}
+          <MovieList title="Upcoming Movies" data={upcoming} />
 
-        {/* List of Top Rated */}
-        <MovieList title="Top Rated" data={topRated} />
-      </ScrollView>
+          {/* List of Top Rated */}
+          <MovieList title="Top Rated" data={topRated} />
+        </ScrollView>
+      )}
     </View>
   )
 }
