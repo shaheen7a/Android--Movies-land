@@ -3,19 +3,18 @@
 
 Thanks for checking out this Application. 🎉
 
-![Android--Movies-land](./showcase/)
+![Android--Movies-land](./showcase/web_view01.png)
 
 ## Overview
 "Movies Land" is a feature-rich Android app designed for movie enthusiasts. It showcases trending and upcoming movies, offers a powerful search function, and provides detailed movie pages with similar movie recommendations, cast information, and more. With its intuitive interface and personalized features, "Movies Land" is the ultimate companion for discovering and exploring the world of movies.
 
-## Screenshots
+## Screenshots - Vids
 
-![Android--Movies-land](./showcase/)
-![Android--Movies-land](./showcase/)
+![Android--Movies-land](./showcase/web_view02.gif)
 
 ### Links
 
-- App Download: [Dropbox]()
+- App Download: [Dropbox](https://www.dropbox.com/scl/fi/ft0mfx0457x5rc6tvvfed/Movie-Land.apk?rlkey=sfc36rq9fk5sp0zyxoha76d0e&dl=0)
 
 - App URL: [Github](https://github.com/shaheen7a/Android--Movies-land)
 
