@@ -10,6 +10,7 @@ Thanks for checking out this Application. 🎉
 
 ## Screenshots - Vids
 
+Live demonstration GIF 👇.
 ![Android--Movies-land](./showcase/web_view02.gif)
 
 ### Links
