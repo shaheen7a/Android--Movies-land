@@ -21,7 +21,7 @@ Live demonstration GIF 👇.
 
 ## My process
 
-### Built with
+### Built with ⚙️⚙️
 
 - React Native
 - Expo
